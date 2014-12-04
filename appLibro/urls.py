@@ -11,4 +11,7 @@ urlpatterns = patterns('',
     ('^hello/$', hello),
     ('^hora/$', hora_actual),
     (r'^hora/mas/(\d{1,2})/$',horas_de_mas),
+    ('^extra/$', muestra_META),
+    ('^contacto/$', contacto),
+    ('^busqueda/$', busqueda),
 )

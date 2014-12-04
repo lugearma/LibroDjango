@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+	{% if books %}
+	<!--El primer filtro nos da la cantidad de resultados
+	y el segundo nos pone una s al final en caso de necesitarla-->
+	<p>Se tienen {{ books|length }} libro{{ books|pluralize }}</p>
+	<h3>Tu busqueda es: {{ query }}</h3>
+	<ul>
+		{% for i in books %}
+			<li>{{ i.titulo }}</li>
+		{% endfor %}
+	</ul>
+	{% else %}
+		<p>No hay libros</p>
+	{% endif %}
+{% endblock %}

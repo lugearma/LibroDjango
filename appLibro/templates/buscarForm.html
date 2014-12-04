@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+	Busqueda
+{% endblock %}
+
+{% block contenido %}
+	{% if err %}
+		<ul>
+			{% for error in err %} 
+				<li style="color: red;">{{ error }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+	<!--el action nos redirigira a la url busqueda una ves enviado-->
+	<form action="" method="GET">
+		<!--definimos la variable q que se envia por GET-->
+		<input type="text" name="q">
+		<input type="submit" value="buscar">
+	</form>
+{% endblock %}	

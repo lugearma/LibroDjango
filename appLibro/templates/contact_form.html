@@ -1,0 +1,21 @@
+<html>
+<head>
+	<title>Contactame</title>
+</head>
+<body>
+	<h1>Contactanos</h1>
+	{% if errors %}
+		<ul>
+			{% for error in errors %}
+				<li>{{ error }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+	<form action="/contacto/" method="POST">
+		<p>Asunto: <input type="text" name="asunto"></p>
+		<p>Tu email (opcional): <input type="text" name="email"></p>
+		<p>Mensage: <textarea name="message" rows="10" cols="50"></textarea></p>
+		<input type="submit" value="Submit">
+	</form>
+</body>
+</html>

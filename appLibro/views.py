@@ -1,5 +1,7 @@
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.http import HttpResponse
+from django.core.mail import send_mail
+from books.models import Libro
 import datetime
 
 #Vista hola mundo
@@ -24,4 +26,50 @@ def book_list(request):
 	books = Book.objects.oreder_by('name')
 	return render_to_response('book_list.html', {'books': books})
 
+def muestra_META(request):
+	values = request.META.items()
+	values.sort()
+	html = []
+	for k, v in values:
+		html.append('<tr><td>%s</td><td>%s</td></tr>' % (k, v))
+	return HttpResponse('<table>%s</table>' % '\n'.join(html))
 
+# Ya no es necesaria esta vista ya que en la de abajo la engloba
+# def form_busqueda(request):
+# 	return render_to_response('buscarForm.html')
+
+def busqueda(request):
+	errors = [];
+	#tomamos la variable q del form que nos llego por request.GET
+	if'q' in request.GET:
+		nombre = request.GET['q']
+		if not nombre:
+			errors.append('Entra el termino de la busqueda')
+		elif len(nombre) > 20:
+			errors.append('Menos caracteres porfa')
+		else:
+			libro = Libro.objects.filter(titulo__icontains = nombre)
+			return render_to_response('resBusqueda.html', 
+			{ 'books': libro, 'query': nombre })
+	return render_to_response('buscarForm.html', {'err': errors})
+
+def contacto(request):
+	errors = [];
+
+	if request.method == 'POST':
+		# Si no tiene subject
+		if not request.POST.get('asunto', ''):
+			errors.append('Porfa, un asunto')
+		if not request.POST.get('message', ''):
+			errors.append('Porfa, un mensaje')
+	if request.POST.get('email') and '@' not in request.POST['email']:
+		errors.append('Porfa, si vas a meterlo hazlo bien')
+	if not errors:
+		send_mail(
+			request.POST['asunto'],
+			request.POST['message'],
+			request.POST.get('email', 'lugearma@gmail.com'),
+			['geroplas_bofo@hotmail.com'],				
+		)
+		return HttpResponseRedirect('/contacto/gracias/')
+	return render_to_response('contact_form.html', { 'errors' : errors })
