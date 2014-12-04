@@ -50,7 +50,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 TEMPLATE_DIRS = (
-    '/home/lugearma/Documentos/Desarrollo/LibroDjango/appLibro/appLibro/templates',
+    '/home/lugearma/Documentos/Desarrollo/EjerciciosLibros/LibroDjango/appLibro/templates',
 )
 
 ROOT_URLCONF = 'appLibro.urls'

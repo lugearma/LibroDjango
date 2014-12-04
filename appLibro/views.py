@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.mail import send_mail
 from books.models import Libro
+from contact.forms import ContactForm
 import datetime
 
 #Vista hola mundo
@@ -54,22 +55,17 @@ def busqueda(request):
 	return render_to_response('buscarForm.html', {'err': errors})
 
 def contacto(request):
-	errors = [];
-
 	if request.method == 'POST':
-		# Si no tiene subject
-		if not request.POST.get('asunto', ''):
-			errors.append('Porfa, un asunto')
-		if not request.POST.get('message', ''):
-			errors.append('Porfa, un mensaje')
-	if request.POST.get('email') and '@' not in request.POST['email']:
-		errors.append('Porfa, si vas a meterlo hazlo bien')
-	if not errors:
-		send_mail(
-			request.POST['asunto'],
-			request.POST['message'],
-			request.POST.get('email', 'lugearma@gmail.com'),
-			['geroplas_bofo@hotmail.com'],				
-		)
-		return HttpResponseRedirect('/contacto/gracias/')
-	return render_to_response('contact_form.html', { 'errors' : errors })
+		form = ContactForm(request.POST)
+		if form.is_valid():
+			cd = form.cleaned_data
+			send_mail(
+				cd['asunto'],
+				cd['message'],
+				cd.get('email', 'gerolas_bofo@hotmail.com'),
+				['gerolas_bofo@hotmail.com'],
+			)
+			return HttpResponseRedirect('/contacto/gracias/')
+	else:
+		form = ContactForm()
+	return render_to_response('contact_form.html', {'form': form})
