@@ -67,5 +67,12 @@ def contacto(request):
 			)
 			return HttpResponseRedirect('/contacto/gracias/')
 	else:
-		form = ContactForm()
+		form = ContactForm(
+					initial = { 'asunto' : 'I love your site!' }
+				)
 	return render_to_response('contact_form.html', {'form': form})
+
+def nombre(request, nombre='gerardo', edad='3'):
+	edad = int(edad)
+	return render_to_response('nombre.html', { 'ed' : edad, 'nombre': nombre })
+
